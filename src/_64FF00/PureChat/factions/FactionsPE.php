@@ -3,9 +3,12 @@
 namespace _64FF00\PureChat\factions;
 
 use pocketmine\Player;
-use pocketmine\Server;
 
-class XeviousPE_Factions implements FactionsInterface
+use factions\FactionsPE as FPE;
+use factions\engine\ChatEngine;
+use factions\manager\Members;
+
+class FactionsPE implements FactionsInterface
 {
     /*
         PureChat by 64FF00 (Twitter: @64FF00)
@@ -21,32 +24,32 @@ class XeviousPE_Factions implements FactionsInterface
     */
 
     /**
-     * @return null|\pocketmine\plugin\Plugin
+     * @return FPE|null
      */
-    public function getAPI()
-    {
-        return Server::getInstance()->getPluginManager()->getPlugin("XeviousPE-Factions");
+    public function getAPI() {
+    	return FPE::get();
     }
 
     public function hasFaction(Player $player) : bool {
-      return $this->getPlayerFaction($player) !== null;
+    	return Members::get($player)->hasFaction();
     }
 
     /**
-     * @param Player $player
-     * @return mixed
+     * @return Faction|null
      */
-    public function getPlayerFaction(Player $player)
-    {
-        return $this->getAPI()->getProvider()->getPlayerFaction($player->getName());
+    public function getPlayerFaction(Player $player) {
+    	$member = Members::get($player);
+    	if($member->hasFaction()) {
+    		return $member->getFaction()->getName();
+    	}
+    	return null;
     }
 
     /**
-     * @param Player $player
      * @return string
      */
-    public function getPlayerRank(Player $player)
-    {
-        // TODO
+    public function getPlayerRank(Player $player) {
+    	return ChatEngine::getBadge(Members::get($player)->getRole());
     }
+
 }
