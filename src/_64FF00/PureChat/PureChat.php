@@ -469,6 +469,7 @@ class PureChat extends PluginBase
                 $string = str_replace("{faction_tag}", $this->getFactionTag($player, $levelName), $string);
                 $string = str_replace("{fac_name}", $this->factionsAPI->getPlayerFaction($player), $string);
                 $string = str_replace("{fac_rank}", $this->factionsAPI->getPlayerRank($player), $string);
+                $string = $this->applyColors($string);
             } else {
                 $string = str_replace("{faction_tag}", '', $string);
             }
@@ -498,8 +499,8 @@ class PureChat extends PluginBase
     {
         $originalChatFormat = $this->getOriginalChatFormat($player, $levelName);
 
-        $chatFormat = $this->applyPCTags($chatFormat, $player, $message, $levelName);
         $chatFormat = $this->applyColors($originalChatFormat);
+        $chatFormat = $this->applyPCTags($chatFormat, $player, $message, $levelName);
 
         return $chatFormat;
     }
