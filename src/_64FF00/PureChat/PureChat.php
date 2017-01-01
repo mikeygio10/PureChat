@@ -337,11 +337,7 @@ class PureChat extends PluginBase
     {
         $factionsPluginName = $this->config->get("default-factions-plugin");
 
-        if($factionsPluginName === null)
-        {
-            $this->getLogger()->notice("No valid factions plugin in default-factions-plugin node was found. Disabling factions plugin support.");
-        }
-        else
+        if($factionsPluginName !== null)
         {
             switch(strtolower($factionsPluginName))
             {
@@ -357,7 +353,6 @@ class PureChat extends PluginBase
 
                             $this->getLogger()->notice("FactionsPro-OLD support enabled.");
 
-                            break;
                         }
                         else
                         {
@@ -365,11 +360,8 @@ class PureChat extends PluginBase
 
                             $this->getLogger()->notice("FactionsPro-NEW support enabled.");
 
-                            break;
                         }
                     }
-
-                    $this->getLogger()->notice("No valid factions plugin in default-factions-plugin node was found. Disabling factions plugin support.");
 
                     break;
 
@@ -380,11 +372,7 @@ class PureChat extends PluginBase
                         $this->factionsAPI = new XeviousPE_Factions();
 
                         $this->getLogger()->notice("XeviousPE-Factions support enabled.");
-
-                        break;
                     }
-
-                    $this->getLogger()->notice("No valid factions plugin in default-factions-plugin node was found. Disabling factions plugin support.");
 
                     break;
 
@@ -397,11 +385,13 @@ class PureChat extends PluginBase
                         $this->getLogger()->notice("FactionsPE support enabled");
                     }
 
-                default:
-
-                    $this->getLogger()->notice("No valid factions plugin in default-factions-plugin node was found. Disabling factions plugin support.");
-
                     break;
+                
+                default:
+                    break;
+            }
+            if($this->factionsAPI === null) {
+                $this->getLogger()->notice("No valid factions plugin in default-factions-plugin node was found. Disabling factions plugin support.");
             }
         }
     }
@@ -508,8 +498,8 @@ class PureChat extends PluginBase
     {
         $originalChatFormat = $this->getOriginalChatFormat($player, $levelName);
 
-        $chatFormat = $this->applyColors($originalChatFormat);
         $chatFormat = $this->applyPCTags($chatFormat, $player, $message, $levelName);
+        $chatFormat = $this->applyColors($originalChatFormat);
 
         return $chatFormat;
     }
